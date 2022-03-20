@@ -1,4 +1,4 @@
-##Plugin pra 15.10 com a API 2.0.0
+#Plugin pra 15.10 com a API 2.0.0
 
 <p> Menu Com varias utilidades para facilitar os players no lobby</p>
 
@@ -8,5 +8,5 @@
 * Particulas
 * Anti Divulgação
 
-##Plugin Feito por PhsTutors
+#Plugin Feito por PhsTutors
 
