@@ -1,0 +1,14 @@
+name: "MenuV1"
+author: "PhsTutors"
+api: 2.0.0
+main: Menu\Main
+version: "1.0"
+website: "www.github.com/phstutors"
+permissions:
+  fly.lobby:
+    description: usar fly no lobby
+    default: op
+  menu.particulas:
+    description: Acesso a particulas
+    default: op
+
