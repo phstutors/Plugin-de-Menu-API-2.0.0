@@ -11,6 +11,7 @@
 ## Plugin Feito por PhsTutors
 
 <p> O plugin é opensource ou seja você pode fazer melhorias ou modificar o codigo, porem nao remova os creditos. </p>
+<p> Nova Atualização, V2.0, removendo bugs do Inv e do BackMenu</p>
 
 ## Agradecidamente JinxDev
 

